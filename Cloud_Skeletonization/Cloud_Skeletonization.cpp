@@ -30,11 +30,11 @@
 
 const bool cloud_input = true; // Run algorithms over cloud dataset.
 
-const vector<int> wheel_range = { /*3, 4, 5, 6, 7, 8, 9*/ };
-const vector<int> grid_cols_range = { /*1, 2, 3*/ };
-const vector<int> grid_rows_range = { /*1, 2, 3*/ };
+const vector<int> wheel_range = { 4/*3, 4, 5, 6, 7, 8, 9*/ };
+const vector<int> grid_cols_range = { /*1, 2, 3, 4*/ };
+const vector<int> grid_rows_range = { /*1, 2, 3, 4*/ };
 const vector<int> triangles_range = { /*1, 2, 3, 4, 5, 6, 7, 8*/ };
-const vector<int> hexagonal_range = { 1, 2, 3, 4, 5, 6, 7 };
+const vector<int> hexagonal_range = { /*1, 2, 3, 4, 5 6, 7*/ };
 const vector<int> squares_range = { /*2, 3, 4, 5, 6, 7, 8, 9*/ };
 
 const bool regular = true; // All grid patterns are regular.
@@ -43,9 +43,9 @@ const bool graph_dependent_cloud_size = true; // Cloud size is dependent on the 
 const int cloud_size_parameter = 100; // Number of points in the cloud per unit length of the pattern.
 
 const string noise_type = "uniform"; // Type of noise used to produce the cloud: uniform or gaussian.
-const vector<double> noise_parameter_range = { /*0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4*/ 0.45, 0.5, 0.55 /*0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2*/ }; // Range of magnitude of noise.
+const vector<double> noise_parameter_range = { 0.1/*0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55 0.6, 0.65, 0.7, 0.75*/ /*0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2 0.22, 0.24, 0.26 0.28, 0.3, 0.32*/ }; // Range of magnitude of noise.
 
-const bool mapper = true; // Run the cloud through the Mapper algorithm.
+const bool mapper = false; // Run the cloud through the Mapper algorithm.
 const bool graph_dependent_num_intervals = true; // Number of intervals is dependent on the length of the pattern.
 const vector<double> num_intervals_parameter = { 1.5, 1.7, 1.9, 2.1, 2.3, 2.5, 2.7, 2.9, 3.1, 3.3 }; // Range of the number of intervals parameter: number of intervals = parameter x pattern length.
 const vector<double> DBSCAN_parameter = { 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5 }; // Range of DBSCAN parameter.
@@ -54,18 +54,18 @@ const string filter_function = "Distance";
 const double sigma = 0.1; // Used in the Gaussian density filter function.
 const int mapper_simp_type = 1; // Type of simplication of the Mapper output: 0: No simplification; 1: RD1V.
 
-const bool alphaReeb = true; // Run the cloud through the alpha-Reeb algorithm.
+const bool alphaReeb = false; // Run the cloud through the alpha-Reeb algorithm.
 const vector<double> alpha_values = { 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6 }; // Range of alpha values.
 const int alphaReeb_simp_type = 1; // Type of simplication of the alpha-Reeb output: 0: No simplification; 1: RD1V.
 
 const double mcsf = 0.05; // A component must represent a fraction of points greater than this fraction to be included in the output.
 
 const bool hopes = true; // Run the cloud through the HoPeS algorithm.
-const int hopes_simp_type = 2; // Type of simplification of the HoPeS output: 0: No simplification; 1: RD1V; 2: RD1V SH MD; 3: RD1V SH 2MD; 4: aR RD1V; 5: RD1V aR RD1V; 6: SH2; 7: SH MD.
+const int hopes_simp_type = 0; // Type of simplification of the HoPeS output: 0: No simplification; 1: RD1V; 2: RD1V SH MD; 3: RD1V SH 2MD; 4: aR RD1V; 5: RD1V aR RD1V; 6: SH2; 7: SH MD.
 
-const int repetitions = 200; // Number of repetitions of the same type of cloud.
+const int repetitions = 1; // Number of repetitions of the same type of cloud.
 
-const bool validation = true; // Record the results.
+const bool validation = false; // Record the results.
 
 const bool test = false; // To do a test run.
 
@@ -73,7 +73,7 @@ const bool test = false; // To do a test run.
 
 const bool image_input = false; // Run algorithms over an image.
 
-const string image_name = "Pottery"; // Woman, Bird_1, Bird_2, Plane, Pottery.
+const string image_name = "Woman"; // Woman, Bird_1, Bird_2, Bird_3, Plane, Pottery, Car, Kangaroo, Rock, Basket, Giraffe, Gull, Ostrich, Penguin, Man.
 
 const bool BSD = false; // Run algorithms over the BSD database.
 
@@ -187,7 +187,12 @@ int main ( int, char*[] )
                             
                             if (validation)
                             {
-                                Validation( expected_Betti_num, original_pattern, cloud_p, mapper_graph, mapper_results[counter_1 * DBSCAN_parameter.size() + counter_2] ); // Testing Betti number, homeomorphism, geometric errors.
+                                if (input.pattern_type == "hexagonal" && input.pattern_size_1 == 7)
+                                {
+                                    Validation_7Hex( expected_Betti_num, original_pattern, cloud_p, mapper_graph, mapper_results[counter_1 * DBSCAN_parameter.size() + counter_2] );
+                                }
+                                
+                                else Validation( expected_Betti_num, original_pattern, cloud_p, mapper_graph, mapper_results[counter_1 * DBSCAN_parameter.size() + counter_2] ); // Testing Betti number, homeomorphism, geometric errors.
                             }
                             
                             if (draw_image)
@@ -234,7 +239,12 @@ int main ( int, char*[] )
                         
                         if (validation)
                         {
-                            Validation( expected_Betti_num, original_pattern, cloud_p, alphaReeb_graph, alphaReeb_results[counter] ); // Testing Betti number, homeomorphism, geometric errors.
+                            if (input.pattern_type == "hexagonal" && input.pattern_size_1 == 7)
+                            {
+                                Validation_7Hex( expected_Betti_num, original_pattern, cloud_p, alphaReeb_graph, alphaReeb_results[counter] );
+                            }
+                            
+                            else Validation( expected_Betti_num, original_pattern, cloud_p, alphaReeb_graph, alphaReeb_results[counter] ); // Testing Betti number, homeomorphism, geometric errors.
                         }
                         
                         if (draw_image)
@@ -258,7 +268,7 @@ int main ( int, char*[] )
                     double max_birth = 0, min_death = 1e10;
                     Graph_H hopes_graph;
                     
-                    Hopes( cloud_p, hopes_graph, max_birth, min_death ); // Generating the Hopes graph.
+                    Hopes( cloud_p, hopes_graph, max_birth, min_death, false ); // Generating the Hopes graph.
                     
                     clock_t end_iter = clock(); // Stop stopwatch for iteration.
                     
@@ -270,7 +280,12 @@ int main ( int, char*[] )
                     
                     if (validation)
                     {
-                        Validation( expected_Betti_num, original_pattern, cloud_p, hopes, hopes_results ); // Testing Betti number, homeomorphism, geometric errors.
+                        if (input.pattern_type == "hexagonal" && input.pattern_size_1 == 7)
+                        {
+                            Validation_7Hex( expected_Betti_num, original_pattern, cloud_p, hopes, hopes_results );
+                        }
+                        
+                        else Validation( expected_Betti_num, original_pattern, cloud_p, hopes, hopes_results ); // Testing Betti number, homeomorphism, geometric errors.
                     }
                     
                     if (draw_image)
@@ -311,8 +326,13 @@ int main ( int, char*[] )
         
         Read_Cloud_From_Image( BSD_image_directory, image_name, input_image, cloud_p, clouds_p, clouds_d ); // Extracting the cloud from the image.
         
-        const Point image_sizes( 2 * input_image.cols, 2 * input_image.rows );
+        const Point image_sizes( 4 * input_image.cols, 4 * input_image.rows );
         Mat cloud_image( image_sizes, CV_8UC3, white );
+        
+        double scale;
+        Point2d shift;
+        
+        Scaling_Parameters( clouds_d, image_sizes, scale, shift );
         
         Draw_Clouds( clouds_d, cloud_image );
         
@@ -329,9 +349,6 @@ int main ( int, char*[] )
                 
                 Mapper( clouds_d[counter], parameters, mapper_graph[counter] ); // Generating the mapper graph.
             }
-            
-            double scale = 2;
-            Point2d shift = Point2d( 0, 0 );
             
             for (int counter = 0; counter < mapper_graph.size(); ++counter)
             {
@@ -363,9 +380,6 @@ int main ( int, char*[] )
                 AlphaReeb_Algorithm( nbhd_graph, parameters, alphaReeb_graph[counter] ); // Alpha-Reeb algorithm.
             }
             
-            double scale = 2;
-            Point2d shift = Point2d( 0, 0 );
-            
             for (int counter = 0; counter < alphaReeb_graph.size(); ++counter)
             {
                 Draw_Graph( alphaReeb_graph[counter], scale, shift, 2, -1, 2, black, alphaReeb_image ); // Drawing the output graph.
@@ -380,14 +394,13 @@ int main ( int, char*[] )
         {
             Mat hopes_image( image_sizes, CV_8UC3, white );
             vector<Graph> hopes_graph( clouds_p.size() );
-            double scale = 2;
-            Point2d shift = Point2d( 0, 0 );
+            
             for (int counter = 0; counter < clouds_p.size(); ++counter) // Looping over clouds.
             {
                 double max_birth = 0, min_death = 1e10;
                 Graph_H g;
                 
-                Hopes( clouds_p[counter], g, max_birth, min_death ); // Generating the Hopes graph.
+                Hopes( clouds_p[counter], g, max_birth, min_death, false ); // Generating the Hopes graph.
                 
                 Simplify_Graph( g, hopes_simp_type_2, min_death, mcsf, hopes_graph[counter] ); // Simplifying the output.
                 
@@ -431,7 +444,7 @@ int main ( int, char*[] )
         
         int directory_size = test_directory_size + train_directory_size + val_directory_size;
         int iterations = directory_size, skip = 0;
-        double mapper_rms_error = 0, aR_rms_error = 0, hopes_rms_error = 0;
+        double mapper_rms_error = 0, aR_rms_error = 0, hopes_rms_error = 0, mapper_max_error = 0, aR_max_error = 0, hopes_max_error = 0, mapper_time = 0, aR_time = 0, hopes_time = 0;
         string image_file;
         
         for (int counter_1 = 0; counter_1 < iterations; ++counter_1) // Looping over images.
@@ -454,6 +467,8 @@ int main ( int, char*[] )
             
             if (mapper_on_image) // Runs the image through the Mapper algorithm.
             {
+                clock_t starttime = clock();
+                
                 vector<Graph> mapper_graph( clouds_p.size() );
                 
                 for (int counter = 0; counter < clouds_p.size(); ++counter) // Looping over clouds.
@@ -467,11 +482,20 @@ int main ( int, char*[] )
                 
                 Combine_Comps( mapper_graph, mapper ); // Combining the components into a single graph.
                 
-                mapper_rms_error += Geometric_Approximation_Error( mapper, cloud_p ).second; // Calculating the RMS error of the output.
+                clock_t endtime = clock();
+                
+                mapper_time += (endtime - starttime) * 1000 / (double)(CLOCKS_PER_SEC);
+                
+                pair<double, double> results = Geometric_Approximation_Error( mapper, cloud_p ); // Calculating the RMS error of the output.
+                
+                mapper_max_error += results.first;
+                mapper_rms_error += results.second;
             }
             
             if (alphaReeb_on_image) // Runs the image through the alpha-Reeb algorithm.
             {
+                clock_t starttime = clock();
+                
                 vector<Graph> alphaReeb_graph( clouds_p.size() );
                 
                 for (int counter = 0; counter < clouds_p.size(); ++counter) // Looping over clouds.
@@ -493,19 +517,31 @@ int main ( int, char*[] )
                 
                 Combine_Comps( alphaReeb_graph, alphaReeb ); // Combining the components into a single graph.
                 
-                aR_rms_error += Geometric_Approximation_Error( alphaReeb, cloud_p ).second; // Calculating the RMS error of the output.
+                clock_t endtime = clock();
+                
+                aR_time += (endtime - starttime) * 1000 / (double)(CLOCKS_PER_SEC);
+                
+                pair<double, double> results = Geometric_Approximation_Error( alphaReeb, cloud_p ); // Calculating the RMS error of the output.
+                
+                aR_max_error += results.first;
+                aR_rms_error += results.second;
             }
             
             if (hopes_on_image) // Runs the image through the HoPeS algorithm.
             {
+                clock_t starttime = clock();
+                
                 vector<Graph> hopes_graph( clouds_p.size() );
                 
                 for (int counter = 0; counter < clouds_p.size(); ++counter) // Looping over clouds.
                 {
+                    bool small_cloud = false;
                     double max_birth = 0, min_death = 1e10;
                     Graph_H g;
                     
-                    Hopes( clouds_p[counter], g, max_birth, min_death ); // Generating the Hopes graph.
+                    if (hopes_simp_type_2 == 0) small_cloud = true;
+                    
+                    Hopes( clouds_p[counter], g, max_birth, min_death, small_cloud ); // Generating the Hopes graph.
                     
                     Simplify_Graph( g, hopes_simp_type_2, min_death, mcsf, hopes_graph[counter] ); // Simplifying the output.
                 }
@@ -514,13 +550,20 @@ int main ( int, char*[] )
                 
                 Combine_Comps( hopes_graph, hopes ); // Combining the components into a single graph.
                 
-                hopes_rms_error += Geometric_Approximation_Error( hopes, cloud_p ).second; // Calculating the RMS error of the output.
+                clock_t endtime = clock();
+                
+                hopes_time += (endtime - starttime) * 1000 / (double)(CLOCKS_PER_SEC);
+                
+                pair<double, double> results = Geometric_Approximation_Error( hopes, cloud_p ); // Calculating the RMS error of the output.
+                
+                hopes_max_error += results.first;
+                hopes_rms_error += results.second;
             }
             
             cout << "Completed iteration " << counter_1 + 1 - skip << "." << endl << endl;
         }
         
-        Write_Results( BSD_directory, mapper_rms_error, aR_rms_error, hopes_rms_error, iterations, skip );
+        Write_Results( BSD_directory, mapper_rms_error, aR_rms_error, hopes_rms_error, mapper_max_error, aR_max_error, hopes_max_error, mapper_time, aR_time, hopes_time, iterations, skip );
         
         clock_t end_time = clock(); // End stopwatch.
         

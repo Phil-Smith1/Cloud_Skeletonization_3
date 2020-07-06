@@ -45,7 +45,7 @@ Point Graph_H::ScaleShift ( P2 p, double scale, Point2d shift )
     return Point2i ( int( scale * p.x() + shift.x ), int( scale * p.y() + shift.y ) );
 }
 
-void Graph_H::DrawEdge ( P2 v1, P2 v2, double scale, Point2d shift, CvScalar color, int thickness, Mat& image )
+void Graph_H::DrawEdge ( P2 v1, P2 v2, double scale, Point2d shift, Scalar color, int thickness, Mat& image )
 {
     line( image, ScaleShift( v1, scale, shift ), ScaleShift( v2, scale, shift ), color, thickness );
 }

@@ -5,7 +5,7 @@
 #include "Find_Diagonal_Gaps.h"
 #include "Draw_1D_PD.h"
 
-void Hopes ( vector<P2>const& cloud, Graph_H& hopes_graph, double& max_birth, double& min_death )
+void Hopes ( vector<P2>const& cloud, Graph_H& hopes_graph, double& max_birth, double& min_death, bool small_cloud )
 {
     vector<vector<P2>> clouds;
     clouds.assign( 1, cloud );
@@ -16,7 +16,10 @@ void Hopes ( vector<P2>const& cloud, Graph_H& hopes_graph, double& max_birth, do
     
     for (int counter = 0; counter < cloud_size; ++counter)
     {
-        if (clouds[counter].size() < 9) continue;
+        if (!small_cloud)
+        {
+            if (clouds[counter].size() < 9) continue;
+        }
         
         Filtration filtration( clouds[counter] );
         
@@ -39,16 +42,16 @@ void Hopes ( vector<P2>const& cloud, Graph_H& hopes_graph, double& max_birth, do
                 if (filtration.persistence[counter].death < min_death) min_death = filtration.persistence[counter].death;
             }
             
-            /*///////////////// Uncomment to draw 1D PD.
+            ///////////////// Uncomment to draw 1D PD.
             
             const Point image_sizes( 800, 800 );
             Mat image( image_sizes, CV_8UC3, CV_RGB( 255, 255, 255 ) );
             
             Draw_1D_PD(filtration.persistence, index_above_gap, image );
             
-            imwrite( "/Users/philsmith/Documents/Xcode Projects/Cloud_Skeletonization/pd.png", image );
+            imwrite( "/Users/philsmith/Documents/Xcode Projects/Cloud_Skeletonization/Code_Output/PD/pd.png", image );
             
-            ////////////////*/
+            ////////////////
         }
         
         hopes_graph.Initialise_Graph( filtration.edges, graph_edges, (int)filtration.delaunay.number_of_vertices() );

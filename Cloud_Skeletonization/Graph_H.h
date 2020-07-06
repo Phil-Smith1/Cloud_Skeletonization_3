@@ -24,7 +24,7 @@ class Graph_H
     
     Point ScaleShift ( P2 p, double scale, Point2d shift );
     
-    void DrawEdge ( P2 v1, P2 v2, double scale, Point2d shift, CvScalar color, int thickness, Mat& image );
+    void DrawEdge ( P2 v1, P2 v2, double scale, Point2d shift, Scalar color, int thickness, Mat& image );
     
     void Draw (double scale, Point2d shift, Scalar color, Scalar crit_color, int thick, Mat& image);
     
